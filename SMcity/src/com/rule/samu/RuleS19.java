@@ -1,0 +1,67 @@
+package com.rule.samu;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+
+import com.event.interfaces.EventBaseI;
+import com.event.interfaces.EventI;
+import com.event.samu.AvailableDoctors;
+import com.rule.correlator.HealthCorrelatorState;
+import com.rule.interfaces.CorrelatorStateI;
+import com.rule.interfaces.RuleI;
+
+public class RuleS19 implements RuleI {
+
+	@Override
+	public ArrayList<EventI> match(EventBaseI eb) {
+		ArrayList<EventI> matchedEvents = new ArrayList<>();
+		for (int i = 0; i < eb.numberOfEvents(); i++) {
+			if (eb.getEvent(i) instanceof AvailableDoctors) {
+				matchedEvents.add(eb.getEvent(i));
+			}
+		}
+		return matchedEvents;
+	}
+
+	@Override
+	public boolean correlate(ArrayList<EventI> matchedEvents) {
+		return true;
+	}
+
+	@Override
+	public boolean filter(ArrayList<EventI> matchedEvents, CorrelatorStateI c) {
+		return true;
+	}
+
+	@Override
+	public void act(ArrayList<EventI> matchedEvents, CorrelatorStateI c) {
+		/*for (int i = 0; i < matchedEvents.size(); i++) {
+			LocalTime t = matchedEvents.get(i).getTimeStamp();
+			HealthCorrelatorState.isDoctorAvailable = true;
+			String id = (String) matchedEvents.get(i).getPropertyValue("id");
+
+			System.out.println("[" + t + "]" + " RuleS19 - " + id);
+		}*/
+		
+		for (int i = 0; i < matchedEvents.size(); i++) {
+			LocalTime t = matchedEvents.get(i).getTimeStamp();
+			String id = (String) matchedEvents.get(i).getPropertyValue("id");
+			
+			HealthCorrelatorState state = HealthCorrelatorState.initCorrelator(c);
+			
+			state.setDoctorAvailable(true);
+			
+			System.out.println("[" + t + "] " + "RuleS19 - " + id);
+		}
+	}
+
+	@Override
+	public void update(ArrayList<EventI> matchedEvents, EventBaseI eb) {
+		for (int i = 0; i < matchedEvents.size(); i++) {
+			if (eb.appearsIn(matchedEvents.get(i))) {
+				eb.removeEvent(matchedEvents.get(i));
+			}
+		}
+	}
+
+}

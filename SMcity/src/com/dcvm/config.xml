@@ -1,0 +1,22 @@
+<deployment>
+	<hosts>
+		<host name="localhost"
+			dir="/Users/malikbouaoud/Desktop/pstl-2022/bidding/src/dcvm/" />
+	</hosts>
+	<cyclicBarrier hostname="localhost" port="55253" />
+	<globalRegistry hostname="localhost" port="55252" />
+	<rmiRegistryPort no="55999" />
+	<jvms2hostnames>
+			<jvm2hostname 
+				jvmuri="JVM1" 
+				rmiRegistryCreator="true"
+				hostname="localhost" 
+				mainclass="src.dcvm.DistributedCVM" />
+			<jvm2hostname 
+				jvmuri="JVM2" 
+				rmiRegistryCreator="false"
+				hostname="localhost" 
+				mainclass="src.dcvm.DistributedCVM" />
+			
+	</jvms2hostnames>
+</deployment>
